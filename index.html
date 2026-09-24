@@ -128,75 +128,10 @@
             </p>
         </div>
     </div>
-
-    <script>
-        let blown = false;
-        function blowCandle() {
-            if (blown) return;
-            blown = true;
-
-            document.getElementById('flame').style.display = 'none';
-
-            const music = document.getElementById('bgMusic');
-            if (music) music.play().catch(() => {});
-
-            setTimeout(() => {
-                document.getElementById('screen1').classList.remove('active');
-                document.getElementById('screen2').classList.add('active');
-                triggerPopper();
-            }, 600);
-
-            setTimeout(() => {
-                document.getElementById('screen2').classList.remove('active');
-                document.getElementById('screen3').classList.add('active');
-            }, 4000);
-        }
-
-        function triggerPopper() {
-            const canvas = document.getElementById('popperCanvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-
-            const particles = [];
-            const colors = ['#f3ae46', '#ebd197', '#ffffff', '#ffb100', '#e67e22'];
-
-            for (let i = 0; i < 120; i++) {
-                particles.push({
-                    x: canvas.width / 2,
-                    y: canvas.height / 2,
-                    vx: (Math.random() - 0.5) * 14,
-                    vy: (Math.random() - 0.5) * 14,
-                    size: Math.random() * 6 + 2,
-                    color: colors[Math.floor(Math.random() * colors.length)],
-                    alpha: 1
-                });
-            }
-
-            function animate() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                particles.forEach((p, index) => {
-                    p.x += p.vx;
-                    p.y += p.vy;
-                    p.alpha -= 0.012;
-                    ctx.globalAlpha = Math.max(0, p.alpha);
-                    ctx.fillStyle = p.color;
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                    ctx.fill();
-
-                    if (p.alpha <= 0) particles.splice(index, 1);
-                });
-
-                if (particles.length > 0) requestAnimationFrame(animate);
-            }
-            animate();
-        }
-    </script>
-    <!-- Sound Effects & Music Audio Tags -->
+ <!-- Audio Tags with Working Direct Links -->
 <audio id="blowSound" src="https://assets.mixkit.co/active_storage/sfx/2578/2578-preview.mp3" preload="auto"></audio>
 <audio id="fireworkSound" src="https://assets.mixkit.co/active_storage/sfx/1698/1698-preview.mp3" preload="auto"></audio>
-<audio id="bgMusic" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a14d52.mp3?filename=happy-birthday-155461.mp3" preload="auto" loop></audio>
+<audio id="bgMusic" src="https://codeskulptor-demos.commondatastorage.googleapis.com/descript-happy-birthday.mp3" preload="auto" loop></audio>
 
 <script>
   var blowSound = document.getElementById('blowSound');
@@ -208,12 +143,15 @@
     
     setTimeout(function() {
       if (fireworkSound) fireworkSound.play().catch(e => console.log(e));
-    }, 1200);
+    }, 1000);
 
     setTimeout(function() {
       if (fireworkSound) fireworkSound.pause();
-      if (bgMusic) bgMusic.play().catch(e => console.log(e));
-    }, 5000);
+      if (bgMusic) {
+        bgMusic.volume = 0.8;
+        bgMusic.play().catch(e => console.log(e));
+      }
+    }, 4500);
 
     document.removeEventListener('click', handleBlow);
   });
