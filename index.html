@@ -193,5 +193,30 @@
             animate();
         }
     </script>
+    <!-- Sound Effects & Music Audio Tags -->
+<audio id="blowSound" src="https://assets.mixkit.co/active_storage/sfx/2578/2578-preview.mp3" preload="auto"></audio>
+<audio id="fireworkSound" src="https://assets.mixkit.co/active_storage/sfx/1698/1698-preview.mp3" preload="auto"></audio>
+<audio id="bgMusic" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a14d52.mp3?filename=happy-birthday-155461.mp3" preload="auto" loop></audio>
+
+<script>
+  var blowSound = document.getElementById('blowSound');
+  var fireworkSound = document.getElementById('fireworkSound');
+  var bgMusic = document.getElementById('bgMusic');
+
+  document.addEventListener('click', function handleBlow() {
+    if (blowSound) blowSound.play().catch(e => console.log(e));
+    
+    setTimeout(function() {
+      if (fireworkSound) fireworkSound.play().catch(e => console.log(e));
+    }, 1200);
+
+    setTimeout(function() {
+      if (fireworkSound) fireworkSound.pause();
+      if (bgMusic) bgMusic.play().catch(e => console.log(e));
+    }, 5000);
+
+    document.removeEventListener('click', handleBlow);
+  });
+</script>
 </body>
 </html>
