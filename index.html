@@ -128,8 +128,8 @@
             </p>
         </div>
     </div>
-<!-- Audio Tags: Soft Bubble & Music -->
-<audio id="bubbleSound" src="https://assets.mixkit.co/active_storage/sfx/2874/2874-preview.mp3" preload="auto"></audio>
+<!-- Water Bubble Pop & Soft Music -->
+<audio id="bubbleSound" src="https://codeskulptor-demos.commondatastorage.googleapis.com/sfx-matches/pop.mp3" preload="auto"></audio>
 <audio id="bgMusic" src="https://codeskulptor-demos.commondatastorage.googleapis.com/descript-happy-birthday.mp3" preload="auto" loop></audio>
 
 <script>
@@ -137,18 +137,26 @@
   var bgMusic = document.getElementById('bgMusic');
 
   document.addEventListener('click', function handleBlow() {
+    // 1. Soft Pop Sound
     if (bubbleSound) {
-      bubbleSound.volume = 0.5;
+      bubbleSound.volume = 0.4;
       bubbleSound.currentTime = 0;
-      bubbleSound.play().catch(e => console.log(e));
+      bubbleSound.play().catch(function(e){ console.log(e); });
     }
 
+    // 2. Music Starts
+    if (bgMusic) {
+      bgMusic.volume = 0.6;
+      bgMusic.play().catch(function(e){ console.log(e); });
+    }
+
+    // 3. Screen Change
     setTimeout(function() {
-      if (bgMusic) {
-        bgMusic.volume = 0.6;
-        bgMusic.play().catch(e => console.log(e));
-      }
-    }, 1500);
+      var s1 = document.getElementById('screen1');
+      var s2 = document.getElementById('screen2');
+      if (s1) s1.style.display = 'none';
+      if (s2) s2.style.display = 'block';
+    }, 1200);
 
     document.removeEventListener('click', handleBlow);
   });
