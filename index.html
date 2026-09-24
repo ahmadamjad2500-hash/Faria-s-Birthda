@@ -128,38 +128,70 @@
             </p>
         </div>
     </div>
-<!-- Water Bubble Pop & Soft Music -->
-<audio id="bubbleSound" src="https://codeskulptor-demos.commondatastorage.googleapis.com/sfx-matches/pop.mp3" preload="auto"></audio>
-<audio id="bgMusic" src="https://codeskulptor-demos.commondatastorage.googleapis.com/descript-happy-birthday.mp3" preload="auto" loop></audio>
 
-<script>
-  var bubbleSound = document.getElementById('bubbleSound');
-  var bgMusic = document.getElementById('bgMusic');
+    <script>
+        let blown = false;
+        function blowCandle() {
+            if (blown) return;
+            blown = true;
 
-  document.addEventListener('click', function handleBlow() {
-    // 1. Soft Pop Sound
-    if (bubbleSound) {
-      bubbleSound.volume = 0.4;
-      bubbleSound.currentTime = 0;
-      bubbleSound.play().catch(function(e){ console.log(e); });
-    }
+            document.getElementById('flame').style.display = 'none';
 
-    // 2. Music Starts
-    if (bgMusic) {
-      bgMusic.volume = 0.6;
-      bgMusic.play().catch(function(e){ console.log(e); });
-    }
+            const music = document.getElementById('bgMusic');
+            if (music) music.play().catch(() => {});
 
-    // 3. Screen Change
-    setTimeout(function() {
-      var s1 = document.getElementById('screen1');
-      var s2 = document.getElementById('screen2');
-      if (s1) s1.style.display = 'none';
-      if (s2) s2.style.display = 'block';
-    }, 1200);
+            setTimeout(() => {
+                document.getElementById('screen1').classList.remove('active');
+                document.getElementById('screen2').classList.add('active');
+                triggerPopper();
+            }, 600);
 
-    document.removeEventListener('click', handleBlow);
-  });
-</script>
+            setTimeout(() => {
+                document.getElementById('screen2').classList.remove('active');
+                document.getElementById('screen3').classList.add('active');
+            }, 4000);
+        }
+
+        function triggerPopper() {
+            const canvas = document.getElementById('popperCanvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const particles = [];
+            const colors = ['#f3ae46', '#ebd197', '#ffffff', '#ffb100', '#e67e22'];
+
+            for (let i = 0; i < 120; i++) {
+                particles.push({
+                    x: canvas.width / 2,
+                    y: canvas.height / 2,
+                    vx: (Math.random() - 0.5) * 14,
+                    vy: (Math.random() - 0.5) * 14,
+                    size: Math.random() * 6 + 2,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    alpha: 1
+                });
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach((p, index) => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.alpha -= 0.012;
+                    ctx.globalAlpha = Math.max(0, p.alpha);
+                    ctx.fillStyle = p.color;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    if (p.alpha <= 0) particles.splice(index, 1);
+                });
+
+                if (particles.length > 0) requestAnimationFrame(animate);
+            }
+            animate();
+        }
+    </script>
 </body>
 </html>
